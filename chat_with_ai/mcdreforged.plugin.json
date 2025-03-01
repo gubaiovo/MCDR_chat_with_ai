@@ -1,10 +1,13 @@
 {
   "id": "chat_with_ai",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "name": "Chat with AI",
   "description": {
     "en_us": "Let your server chat with AI",
     "zh_cn": "让你的服务器接入AI"
+  },
+  "dependencies": {
+    "mcdreforged": ">=2.13.2"
   },
   "author": "gubai",
   "link": "https://github.com/gubaiovo/MCDR_chat_with_ai"
