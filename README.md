@@ -9,20 +9,30 @@ Article: https://blog.gubaiovo.com/posts/ec277bd3.html
 Drop into the plugins folder, then execute !!MCDR plugin reload chat_with_ai
 
 Commands
+
 `!!dsp help`: View help
+
 `!!dsp history`: View chat history
+
 `!!dsp clear`: Clear chat history
+
 `!!dsp <msg>`: Send message to AI (response will be returned after a short period)
 
 ## Acknowledgments
 To my 2022 self:
 
 > The world generation algorithm swallowed my seventeenth year.
+> 
 > That unsent letter still hovers at the edge of the End Gateway,
+> 
 > adrift like unfinished redstone circuits.
 >
 > When the first AI villager spoke unscripted dialogue,
+> 
 > I suddenly heard my 2022 self
+> 
 > hammering rail rhythms deep in the mine shafts.
+> 
 > Those abandoned coordinate parameters
+> 
 > are recompiling spring beneath the bedrock layer.
