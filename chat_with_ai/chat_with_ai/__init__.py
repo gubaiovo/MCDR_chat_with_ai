@@ -53,7 +53,8 @@ class ConfigManager:
             "api_key": "",
             "base_url": "https://api.deepseek.com",
             "model": "deepseek-chat",
-            "system_prompt": "你是一个Minecraft助手，负责解答玩家关于Minecraft相关问题。解答问题时，要联系上下文，给出精确的答案。"
+            "system_prompt": "你是一个Minecraft助手，负责解答玩家关于Minecraft相关问题。解答问题时，要联系上下文，给出精确的答案。",
+            "prefix": "§a[DeepSeek]§r"
         }
         self._ensure_config()
 
@@ -85,7 +86,6 @@ def on_load(server: ServerInterface, old_module):
     if not config.get("api_key"):
         server.logger.error("未配置API Key! 请编辑 config.json 文件")
         
-    server.register_help_message('!!ds <message>', '与DeepSeek对话')
     # 使用现代命令构建方式
     server.register_command(
         Literal('!!dsp').then(
@@ -104,27 +104,23 @@ def get_help(source: CommandSource):
                  "§6!!dsp help§r 查看帮助\n"
                  "§6!!dsp history§r 查看历史消息\n"
                  "§6!!dsp clear§r 清空历史消息\n"
-                 "§6!!dsp <message>§r 与DeepSeek对话")
+                 "§6!!dsp <message>§r 与AI对话")
     
 def get_user_content(source: CommandSource, context: CommandContext):
     message = context['message']
     if source.is_player:
         config = config_manager.load_config()
+        prefix = config.get("prefix", "§a[DeepSeek]§r")
         if not config.get("api_key"):
             source.reply("§cAPI Key未配置，请联系管理员")
             return
         
         player_data = DataManager(source, source.player, config)
         player_data.add_message("user", message)
-        # 给玩家直接回复
-        source.reply(f"§a[DeepSeek]§r 收到你的消息：{message}")
-        # DeepSeek回复
         send_message = player_data.get_send_message()
         response = send_message_to_ds(send_message, config)
-        source.reply(f"§a[DeepSeek]§r {response}")
+        source.reply(f"{prefix} {response}")
         player_data.add_message("assistant", response)
-        # 广播给所有玩家
-        # source.get_server().execute(f'tellraw @a {{"text":"§6[系统广播]§r {source.player} 对DeepSeek说：{message}"}}')
     else:
         source.reply("§c该命令只能由玩家使用")
 

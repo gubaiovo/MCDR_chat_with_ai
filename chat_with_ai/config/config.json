@@ -2,5 +2,6 @@
   "api_key": "your_api_key_here",
   "base_url": "https://api.deepseek.com",
   "model": "deepseek-chat",
-  "system_prompt": "你是一个Minecraft助手，负责解答玩家关于Minecraft相关问题。解答问题时，要联系上下文，给出精确的答案。"
+  "system_prompt": "你是一个Minecraft助手，负责解答玩家关于Minecraft相关问题。解答问题时，要联系上下文，给出精确的答案。",
+  "prefix": "§a[DeepSeek]§r"
 }
