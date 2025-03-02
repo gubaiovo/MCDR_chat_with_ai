@@ -7,7 +7,7 @@
     "zh_cn": "让你的服务器接入AI"
   },
   "dependencies": {
-    "mcdreforged": ">=2.13.2"
+    "uuid_api": ">=0.1.2"
   },
   "author": "gubai",
   "link": "https://github.com/gubaiovo/MCDR_chat_with_ai"
