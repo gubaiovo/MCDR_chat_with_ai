@@ -1,0 +1,50 @@
+chat_with_ai:
+
+  help_message: |
+    ------------------------
+    §3作者：gubai
+    遇到错误请在github提交issue
+    https://github.com/gubaiovo/MCDR_chat_with_ai
+    
+    §a[Chat with AI]§r 命令：
+    §6!!dsp help§r 查看帮助
+    §6!!dsp history§r 查看历史消息
+    §6!!dsp clear§r 清空历史消息
+    §6!!dsp system§r 查看AI预设
+    §6!!dsp system <system>§r 设置AI预设
+    §6!!dsp prefix§r 查看AI名称
+    §6!!dsp prefix <prefix>§r 设置AI名称
+    §6!!dsp init system§r 初始化AI预设
+    §6!!dsp init prefix§r 初始化AI名称
+    §6!!dsp init all§r 全部初始化且清空历史记录
+    §6!!dsp msg <message>§r 与AI对话
+
+  only_by_player: §c该命令只能由玩家使用
+  create_config: §r创建配置文件
+  correct_config: 配置文件格式正确
+
+  prefix:
+    now_prefix: §a当前AI名称为：
+    set_prefix: §aAI名称修改成功
+    init_prefix: §aAI名称初始化成功
+  system:
+    now_system: §a当前AI预设为：
+    set_system: §aAI预设修改成功
+    init_system: §aAI预设初始化成功
+    
+  history:
+    now_history: §a当前历史消息：
+    clear_history: §a历史消息已清空
+  init_all_success: §a初始化成功
+
+  check_not_empty: 检测到
+
+  error:
+    no_system: §c未找到该AI预设
+    input_prefix_is_empty: §cAI名称不能为空
+    input_prefix_too_long: §cAI名称不能超过8个字符
+    check_empty: 未检测到
+    config_error: 配置文件错误
+    please_check_config: 请编辑 config.json 文件
+
+  

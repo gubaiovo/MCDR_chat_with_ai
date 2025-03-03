@@ -1,0 +1,50 @@
+chat_with_ai:
+
+  help_message: |
+    ------------------------
+    §3Author：gubai
+    If you encounter an error, please submit an issue on github
+    https://github.com/gubaiovo/MCDR_chat_with_ai
+    
+    §a[Chat with AI]§r Commands：
+    §6!!dsp help§r View help
+    §6!!dsp history§r View history
+    §6!!dsp clear§r Clear history
+    §6!!dsp system§r View AI system prompt
+    §6!!dsp system <system>§r Set AI system prompt
+    §6!!dsp prefix§r View AI prefix
+    §6!!dsp prefix <prefix>§r Set AI prefix
+    §6!!dsp init system§r Initialize AI system prompt
+    §6!!dsp init prefix§r Initialize AI prefix
+    §6!!dsp init all§r Initialize all and clear history
+    §6!!dsp msg <message>§r Chat with AI
+
+  only_by_player: §cThis command can only be used by players
+  create_config: §rCreate configuration file
+  correct_config: Correct configuration file format
+
+  prefix:
+    now_prefix: §aCurrent AI prefix is 
+    set_prefix: §aAI prefix modified successfully
+    init_prefix: §aAI prefix initialized successfully
+  system:
+    now_system: §aCurrent AI system prompt is 
+    set_system: §aAI system prompt modified successfully
+    init_system: §aAI system prompt initialized successfully
+    
+  history:
+    now_history: §aCurrent history message 
+    clear_history: §aHistory message cleared
+  init_all_success: §aInitialization successful
+
+  check_not_empty: Detected
+
+  error:
+    no_system: §cAI system prompt not found
+    input_prefix_is_empty: §cAI prefix cannot be empty
+    input_prefix_too_long: §cAI prefix cannot exceed 8 characters
+    check_empty: Not detected
+    config_error: Configuration file error
+    please_check_config: Please edit the config.json file
+
+  

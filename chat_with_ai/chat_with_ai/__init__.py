@@ -4,8 +4,10 @@ from chat_with_ai.DataManager import DataManager
 from chat_with_ai.ConfigManager import ConfigManager
 
 
-def command_register(server: ServerInterface):
+def command_register(server: ServerInterface, config: dict):
     builder = SimpleCommandBuilder()
+    require = Requirements()
+    level_dict = config.get("permission", {})
     builder.command('!!dsp', get_help)
     builder.command('!!dsp help', get_help)
     builder.command('!!dsp history', get_history)
@@ -17,55 +19,58 @@ def command_register(server: ServerInterface):
     builder.command('!!dsp init system', init_system_prompt)
     builder.command('!!dsp init prefix', init_prefix)
     builder.command('!!dsp init all', init_all)
-    builder.command('!!dsp <message>', get_user_content)
+    builder.command('!!dsp msg <message>', get_user_content)
 
     builder.arg('prefix', GreedyText)
     builder.arg('message', GreedyText)
     builder.arg('system', GreedyText)
+
+    for literal in level_dict:
+        permission = level_dict[literal]
+
+        builder.literal(literal).requires(
+            require.has_permission(permission),
+            failure_message_getter=lambda err, p=permission: "lack_permission"
+        )
+
     builder.register(server)
+    
+
+
+def tr(key, *args):
+    return ServerInterface.get_instance().tr(f"chat_with_ai.{key}", *args)
 
 def on_load(server: ServerInterface, old_module):
     global config_manager
     config_manager = ConfigManager(server)
     config = config_manager.load_config()
-    if not config.get("api_key"):
-        server.logger.error("未配置API Key! 请编辑 config.json 文件")
+    config_manager.check_config_when_loading()
+    command_register(server, config)
 
-    command_register(server)
 
 def set_system_prompt(source: CommandSource, context: CommandContext):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
     system_prompt = context['system']
-    player_data = DataManager(source, source.player)
+    player_data = DataManager(source=source, name=source.player)
     player_data.set_system(system_prompt)
 
 
 def get_help(source: CommandSource):
-    source.reply("§a[Chat with AI]§r 命令：\n"
-                 "§6!!dsp help§r 查看帮助\n"
-                 "§6!!dsp history§r 查看历史消息\n"
-                 "§6!!dsp clear§r 清空历史消息\n"
-                 "§6!!dsp system§r 查看ai预设\n"
-                 "§6!!dsp system <system>§r 设置ai预设\n"
-                 "§6!!dsp prefix§r 查看ai名称\n"
-                 "§6!!dsp prefix <prefix>§r 设置ai名称\n"
-                 "§6!!dsp init system§r 初始化角色预设\n"
-                 "§6!!dsp init prefix§r 初始化角色预设\n"
-                 "§6!!dsp init all§r 全部初始化且清空历史记录\n"
-                 "§6!!dsp <message>§r 与AI对话")
+    source.reply(tr("help_message"))
     
+@new_thread
 def get_user_content(source: CommandSource, context: CommandContext):
     message = context['message']
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
     config = config_manager.load_config()
-    player_data = DataManager(source, source.player, config)
+    player_data = DataManager(source=source, name=source.player, config=config)
     prefix = player_data.prefix
     if not config.get("api_key"):
-        source.reply("§cAPI Key未配置，请联系管理员")
+        source.reply(tr("error.no_key"))
         return
     message = player_data.add_message("user", message)
     response = send_message_to_ds(message, config)
@@ -87,63 +92,66 @@ def send_message_to_ds(send_message: str, config: dict):
 
 def set_prefix(source: CommandSource, context: CommandContext):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
     prefix = context['prefix']
     if not prefix :
-        source.reply("请输入AI名称")
+        source.reply(tr("error.input_prefix_is_empty"))
         return
     if len(prefix) > 8:
-        source.reply("AI名称不能超过8个字符")
+        source.reply(tr("error.input_prefix_too_long"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.set_prefix(prefix)
 
 def get_system_prompt(source: CommandSource):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.get_system_prompt()
 
 def get_prefix(source: CommandSource):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.get_prefix()
 
 def get_history(source: CommandSource):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.get_history()
 
 def clear_history(source: CommandSource):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.clear_history()
 
 def init_system_prompt(source: CommandSource):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.init_system_prompt()
 
 def init_prefix(source: CommandSource):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.init_prefix()
     
 def init_all(source: CommandSource, ):
     if not source.is_player:
-        source.reply("§c该命令只能由玩家使用")
+        source.reply(tr("only_by_player"))
         return
-    player_data = DataManager(source, source.player, config_manager.load_config())
+    player_data = DataManager(source=source, name=source.player, config=config_manager.load_config())
     player_data.init_all()
+
+
+    

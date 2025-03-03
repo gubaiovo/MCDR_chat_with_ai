@@ -32,7 +32,7 @@ Commands
 
 `!!dsp init all`: Initialize all and clear chat history
 
-`!!dsp <message>`: Chat with AI
+`!!dsp msg <message>`: Chat with AI
 
 ## Acknowledgments
 

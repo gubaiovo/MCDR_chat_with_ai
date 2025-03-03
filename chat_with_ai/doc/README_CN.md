@@ -33,7 +33,7 @@ DeepSeek 恢复正常后，便尝试编写一个MCDR插件，使MC服务器能�
 
 `!!dsp init all`: 全部初始化且清空历史记录
 
-`!!dsp <message>`: 与AI对话
+`!!dsp msg <message>`: 与AI对话
 
 
 
