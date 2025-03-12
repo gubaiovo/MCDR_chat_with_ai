@@ -3,9 +3,19 @@ from pathlib import Path
 import uuid_api
 import os
 import json
+import hashlib
+import time
+
 
 def tr(key, *args):
     return ServerInterface.get_instance().tr(f"chat_with_ai.{key}", *args)
+
+def hash_name_with_timestamp(name: str) -> str:
+    timestamp = str(int(time.time()))
+    combined_string = name + timestamp
+    hash_object = hashlib.sha256(combined_string.encode())
+    hash_hex = hash_object.hexdigest()
+    return hash_hex[:60]
 
 class DataManager:
     def __init__(self, source: CommandSource, name: str, config: dict = None):
@@ -20,7 +30,12 @@ class DataManager:
         if name in uuid_data:
             uuid = uuid_data[name]
         else:
-            uuid = uuid_api.get_uuid(name)
+            try:
+                uuid = uuid_api.get_uuid(name)
+
+            except Exception as e:
+                self.server.logger.error(str(e))
+                uuid = hash_name_with_timestamp(name)
             uuid_data[name] = uuid
             with open(uuid_path, 'w') as file:
                 json.dump(uuid_data, file, indent=4)
