@@ -27,18 +27,18 @@ class DataManager:
                 json.dump({}, file)
         with open(uuid_path, 'r') as file:
             uuid_data = json.load(file)
-        if name in uuid_data:
-            uuid = uuid_data[name]
-        else:
+        uuid = uuid_data.get(name, None)
+
+        if uuid is None:
             try:
                 uuid = uuid_api.get_uuid(name)
-
             except Exception as e:
-                self.server.logger.error(str(e))
                 uuid = hash_name_with_timestamp(name)
+                
             uuid_data[name] = uuid
             with open(uuid_path, 'w') as file:
                 json.dump(uuid_data, file, indent=4)
+
 
         self.config = config if config is not None else {}
         self.source = source
